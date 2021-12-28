@@ -1,6 +1,7 @@
 package com.example.simplehero.di
 
 import com.example.simplehero.repositories.ComicRepository
+import com.example.simplehero.webservices.CharacterWebService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +14,7 @@ object RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideComicRepository(): ComicRepository {
-        return ComicRepository()
+    fun provideComicRepository(characterWebService: CharacterWebService): ComicRepository {
+        return ComicRepository(characterWebService)
     }
 }

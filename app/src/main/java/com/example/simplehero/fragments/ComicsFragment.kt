@@ -41,7 +41,8 @@ class ComicsFragment : Fragment() {
         initComicsEmptyList()
         observeComics()
 
-        comicViewModel.getComics(0)
+        val doctorStrangeId = 1009282
+        comicViewModel.getComics(doctorStrangeId)
     }
 
     private fun initComicsEmptyList() {

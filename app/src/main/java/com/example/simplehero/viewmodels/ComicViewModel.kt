@@ -18,8 +18,7 @@ class ComicViewModel
 
     fun getComics(characterId: Int) {
         viewModelScope.launch {
-            val comicsDummy = comicRepository.getComics(characterId)
-            comics.value = comicsDummy
+            comics.value = comicRepository.getComics(characterId)
         }
     }
 }
