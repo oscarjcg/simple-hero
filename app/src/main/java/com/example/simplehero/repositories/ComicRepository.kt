@@ -9,9 +9,9 @@ private const val HASH = "6fa0eed9ec9817ede58edaadf9c9ab4a"
 
 class ComicRepository(private val characterWebService: CharacterWebService) {
 
-    suspend fun getComics(characterId: Int): List<Comic> {
+    suspend fun getComics(characterId: Int, offset: Int, limit: Int): List<Comic> {
         // TODO: Review this
-        val comics = characterWebService.getComics(characterId, TS, APIKEY, HASH)
+        val comics = characterWebService.getComics(characterId, TS, APIKEY, HASH, offset, limit)
         return comics.data!!.results!!
     }
 }

@@ -3,8 +3,11 @@ package com.example.simplehero.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.simplehero.databinding.ComicViewholderBinding
 import com.example.simplehero.models.Comic
+import com.example.simplehero.utils.IMAGE_VARIANT_STANDARD_LARGE
+import com.example.simplehero.utils.ImageUtils
 
 class ComicsAdapter(private var comics: List<Comic>) : RecyclerView.Adapter<ComicsAdapter.ViewHolder>() {
 
@@ -20,6 +23,16 @@ class ComicsAdapter(private var comics: List<Comic>) : RecyclerView.Adapter<Comi
         val comic = comics[position]
 
         holder.binding.title.text = comic.title
+
+        val thumbnailUrl = ImageUtils.buildImageUrl(
+            comic.thumbnail.path,
+            IMAGE_VARIANT_STANDARD_LARGE,
+            comic.thumbnail.extension)
+
+        Glide
+            .with(holder.binding.image)
+            .load(thumbnailUrl)
+            .into(holder.binding.image)
     }
 
     override fun getItemCount(): Int {

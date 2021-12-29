@@ -1,12 +1,14 @@
 package com.example.simplehero.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.simplehero.adapters.ComicsAdapter
 import com.example.simplehero.databinding.FragmentComicsBinding
 import com.example.simplehero.viewmodels.ComicViewModel
@@ -32,6 +34,8 @@ class ComicsFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentComicsBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
+        binding.viewModel = comicViewModel
         return binding.root
     }
 
@@ -40,9 +44,9 @@ class ComicsFragment : Fragment() {
 
         initComicsEmptyList()
         observeComics()
+        comicsListOnEndListener()
 
-        val doctorStrangeId = 1009282
-        comicViewModel.getComics(doctorStrangeId)
+        requestComics()
     }
 
     private fun initComicsEmptyList() {
@@ -55,6 +59,25 @@ class ComicsFragment : Fragment() {
         comicViewModel.comics.observe(viewLifecycleOwner, { comics ->
             comicsAdapter.setComics(comics)
         })
+    }
+
+    private fun comicsListOnEndListener() {
+        binding.comics.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+
+                if (!recyclerView.canScrollVertically(1)) {
+                    if (!comicViewModel.loading.value!!) {
+                        requestComics()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun requestComics() {
+        val doctorStrangeId = 1009282
+        comicViewModel.getComics(doctorStrangeId)
     }
 
     companion object {

@@ -12,5 +12,7 @@ interface CharacterWebService {
         @Path("characterId") characterId: Int,
         @Query("ts") ts: String,
         @Query("apikey") apikey: String,
-        @Query("hash") hash: String): ComicResponse
+        @Query("hash") hash: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int,): ComicResponse
 }
