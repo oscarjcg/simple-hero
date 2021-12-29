@@ -9,7 +9,14 @@ import com.example.simplehero.models.Comic
 import com.example.simplehero.utils.IMAGE_VARIANT_STANDARD_LARGE
 import com.example.simplehero.utils.ImageUtils
 
-class ComicsAdapter(private var comics: List<Comic>) : RecyclerView.Adapter<ComicsAdapter.ViewHolder>() {
+class ComicsAdapter(
+        private var comics: List<Comic>,
+        private val actionInterface: ActionInterface
+    ) : RecyclerView.Adapter<ComicsAdapter.ViewHolder>() {
+
+    interface ActionInterface {
+        fun onClickComic(comic: Comic)
+    }
 
     class ViewHolder(val binding: ComicViewholderBinding) : RecyclerView.ViewHolder(binding.root) {
     }
@@ -33,6 +40,10 @@ class ComicsAdapter(private var comics: List<Comic>) : RecyclerView.Adapter<Comi
             .with(holder.binding.image)
             .load(thumbnailUrl)
             .into(holder.binding.image)
+
+        holder.binding.container.setOnClickListener {
+            actionInterface.onClickComic(comic)
+        }
     }
 
     override fun getItemCount(): Int {

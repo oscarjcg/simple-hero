@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.simplehero.models.Comic
+import com.example.simplehero.repositories.CharacterRepository
 import com.example.simplehero.repositories.ComicRepository
 import com.example.simplehero.utils.COMIC_REQUEST_LIMIT
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,9 +14,11 @@ import javax.inject.Inject
 @HiltViewModel
 class ComicViewModel
     @Inject
-    constructor(private val comicRepository: ComicRepository) : ViewModel() {
+    constructor(private val comicRepository: ComicRepository,
+                private val characterRepository: CharacterRepository) : ViewModel() {
 
     val comics = MutableLiveData<List<Comic>>()
+    val comicSelected = MutableLiveData<Comic>()
     val loading = MutableLiveData(false)
     var offsetRequest = 0
 
@@ -23,7 +26,7 @@ class ComicViewModel
         setLoading(true)
 
         viewModelScope.launch {
-            val newComics = ArrayList(comicRepository.getComics(characterId, offsetRequest, COMIC_REQUEST_LIMIT))
+            val newComics = ArrayList(characterRepository.getComics(characterId, offsetRequest, COMIC_REQUEST_LIMIT))
 
             if (comics.value.isNullOrEmpty())
                 comics.value = newComics
@@ -34,6 +37,17 @@ class ComicViewModel
 
             setLoading(false)
         }
+    }
+
+    fun getComic(comicId: Int) {
+        setLoading(true)
+
+        viewModelScope.launch {
+            comicSelected.value = comicRepository.getComic(comicId)
+
+            setLoading(false)
+        }
+
     }
 
     fun setLoading(loading: Boolean) {

@@ -2,6 +2,7 @@ package com.example.simplehero.di
 
 import com.example.simplehero.utils.BASE_URL
 import com.example.simplehero.webservices.CharacterWebService
+import com.example.simplehero.webservices.ComicWebService
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -36,5 +37,13 @@ object RetrofitModule {
         return retrofit
             .build()
             .create(CharacterWebService::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun providesComicWebservice(retrofit: Retrofit.Builder): ComicWebService {
+        return retrofit
+            .build()
+            .create(ComicWebService::class.java)
     }
 }

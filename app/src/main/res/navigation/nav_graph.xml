@@ -9,5 +9,18 @@
         android:id="@+id/comicsFragment"
         android:name="com.example.simplehero.fragments.ComicsFragment"
         android:label="fragment_comics"
-        tools:layout="@layout/fragment_comics" />
+        tools:layout="@layout/fragment_comics" >
+        <action
+            android:id="@+id/action_comicsFragment_to_comicDetailFragment"
+            app:destination="@id/comicDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/comicDetailFragment"
+        android:name="com.example.simplehero.fragments.ComicDetailFragment"
+        android:label="fragment_comic_detail"
+        tools:layout="@layout/fragment_comic_detail" >
+        <argument
+            android:name="comicId"
+            app:argType="integer" />
+    </fragment>
 </navigation>

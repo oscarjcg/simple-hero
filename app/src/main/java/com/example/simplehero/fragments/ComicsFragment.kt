@@ -7,18 +7,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.simplehero.adapters.ComicsAdapter
 import com.example.simplehero.databinding.FragmentComicsBinding
+import com.example.simplehero.models.Comic
 import com.example.simplehero.viewmodels.ComicViewModel
 
 private const val GRID_WIDTH_SPAN = 2
 
-class ComicsFragment : Fragment() {
+class ComicsFragment : Fragment(), ComicsAdapter.ActionInterface {
 
     private lateinit var binding: FragmentComicsBinding
     private val comicViewModel: ComicViewModel by activityViewModels()
+    private lateinit var navController: NavController
 
     private lateinit var comicsAdapter: ComicsAdapter
 
@@ -42,6 +46,8 @@ class ComicsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        navController = findNavController()
+
         initComicsEmptyList()
         observeComics()
         comicsListOnEndListener()
@@ -50,7 +56,7 @@ class ComicsFragment : Fragment() {
     }
 
     private fun initComicsEmptyList() {
-        comicsAdapter = ComicsAdapter(ArrayList())
+        comicsAdapter = ComicsAdapter(ArrayList(), this)
         binding.comics.layoutManager = GridLayoutManager(activity, GRID_WIDTH_SPAN)
         binding.comics.adapter = comicsAdapter
     }
@@ -93,5 +99,10 @@ class ComicsFragment : Fragment() {
                 arguments = Bundle().apply {
                 }
             }
+    }
+
+    override fun onClickComic(comic: Comic) {
+        val action = ComicsFragmentDirections.actionComicsFragmentToComicDetailFragment(comic.id)
+        navController.navigate(action)
     }
 }

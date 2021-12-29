@@ -12,6 +12,10 @@ data class Comic (
     @Expose
     val title: String,
 
+    @SerializedName("description")
+    @Expose
+    val description: String,
+
     @SerializedName("thumbnail")
     @Expose
     val thumbnail: ComicThumbnail,
