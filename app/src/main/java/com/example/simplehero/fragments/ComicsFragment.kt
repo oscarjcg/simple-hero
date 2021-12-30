@@ -6,14 +6,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.simplehero.R
 import com.example.simplehero.adapters.ComicsAdapter
 import com.example.simplehero.databinding.FragmentComicsBinding
 import com.example.simplehero.models.Comic
+import com.example.simplehero.utils.Connectivity
+import com.example.simplehero.utils.UIEvent
 import com.example.simplehero.viewmodels.ComicViewModel
 
 private const val GRID_WIDTH_SPAN = 2
@@ -51,6 +55,7 @@ class ComicsFragment : Fragment(), ComicsAdapter.ActionInterface {
         initComicsEmptyList()
         observeComics()
         comicsListOnEndListener()
+        observeUIEvents()
 
         requestComics()
     }
@@ -84,6 +89,32 @@ class ComicsFragment : Fragment(), ComicsAdapter.ActionInterface {
     private fun requestComics() {
         val doctorStrangeId = 1009282
         comicViewModel.getComics(doctorStrangeId)
+    }
+
+    private fun observeUIEvents() {
+        comicViewModel.uiState.observe(viewLifecycleOwner, {
+            it.getContentIfNotHandled()?.let { uiEvent ->
+                handleUIEvent(uiEvent)
+            }
+        })
+    }
+
+    private fun handleUIEvent(event: UIEvent<Nothing>) {
+        when (event) {
+            is UIEvent.CheckInternet -> {
+                checkInternet()
+            }
+            is UIEvent.NoResults -> {
+                comicViewModel.setStateInfo(true, getText(R.string.no_results) as String)
+            }
+        }
+    }
+
+    private fun checkInternet() {
+        if (context?.let { Connectivity.isOnline(it) } == false) {
+            Toast.makeText(activity, R.string.no_internet, Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
     companion object {
