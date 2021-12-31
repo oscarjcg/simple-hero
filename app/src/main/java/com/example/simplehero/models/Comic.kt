@@ -19,4 +19,20 @@ data class Comic (
     @SerializedName("thumbnail")
     @Expose
     val thumbnail: ComicThumbnail,
+
+    @SerializedName("issueNumber")
+    @Expose
+    val issueNumber: Float,
+
+    @SerializedName("format")
+    @Expose
+    val format: String,
+
+    @SerializedName("pageCount")
+    @Expose
+    val pageCount: Int,
+
+    @SerializedName("prices")
+    @Expose
+    val prices: ArrayList<ComicPrice>,
 )

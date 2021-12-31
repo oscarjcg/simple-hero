@@ -8,6 +8,7 @@ import com.example.simplehero.databinding.ComicViewholderBinding
 import com.example.simplehero.models.Comic
 import com.example.simplehero.utils.IMAGE_VARIANT_STANDARD_LARGE
 import com.example.simplehero.utils.ImageUtils
+import com.example.simplehero.utils.UtilsFun
 
 class ComicsAdapter(
         private var comics: List<Comic>,
@@ -32,7 +33,7 @@ class ComicsAdapter(
         holder.binding.title.text = comic.title
 
         val thumbnailUrl = ImageUtils.buildImageUrl(
-            comic.thumbnail.path,
+            UtilsFun.httpToHttps(comic.thumbnail.path),
             IMAGE_VARIANT_STANDARD_LARGE,
             comic.thumbnail.extension)
 

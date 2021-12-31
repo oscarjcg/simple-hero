@@ -6,15 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.example.simplehero.R
 import com.example.simplehero.databinding.FragmentComicDetailBinding
-import com.example.simplehero.utils.Connectivity
+import com.example.simplehero.utils.*
 import com.example.simplehero.utils.IMAGE_VARIANT_STANDARD_LARGE
-import com.example.simplehero.utils.ImageUtils
-import com.example.simplehero.utils.UIEvent
 import com.example.simplehero.viewmodels.ComicViewModel
 
 
@@ -23,7 +26,7 @@ class ComicDetailFragment : Fragment() {
     private lateinit var binding: FragmentComicDetailBinding
     private val args: ComicDetailFragmentArgs by navArgs()
     private val comicViewModel: ComicViewModel by activityViewModels()
-
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +48,9 @@ class ComicDetailFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        navController = findNavController()
+        setToolbar()
+
         observeComic()
         observeUIEvents()
 
@@ -57,8 +63,8 @@ class ComicDetailFragment : Fragment() {
             binding.description.text = comic.description
 
             val thumbnailUrl = ImageUtils.buildImageUrl(
-                comic.thumbnail.path,
-                IMAGE_VARIANT_STANDARD_LARGE,
+                UtilsFun.httpToHttps(comic.thumbnail.path),
+                IMAGE_VARIANT_PORTRAIT_UNCANNY,
                 comic.thumbnail.extension)
             Glide
                 .with(binding.image)
@@ -92,6 +98,17 @@ class ComicDetailFragment : Fragment() {
                 .show()
         }
     }
+
+    private fun setToolbar() {
+        val navHostFragment = NavHostFragment.findNavController(this)
+        binding.toolbar.setupWithNavController( navHostFragment)
+
+        binding.toolbar.title = ""
+
+        setHasOptionsMenu(true)
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+    }
+
 
     companion object {
         /**

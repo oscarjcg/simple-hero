@@ -5,8 +5,8 @@
       <map>
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.151268115942029" />
         <entry key="app/src/main/res/layout/comic_viewholder.xml" value="0.151268115942029" />
-        <entry key="app/src/main/res/layout/fragment_comic_detail.xml" value="0.25" />
-        <entry key="app/src/main/res/layout/fragment_comics.xml" value="0.14079381659480408" />
+        <entry key="app/src/main/res/layout/fragment_comic_detail.xml" value="0.35213156678191937" />
+        <entry key="app/src/main/res/layout/fragment_comics.xml" value="0.31421133259294626" />
       </map>
     </option>
   </component>
