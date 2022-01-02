@@ -1,4 +1,4 @@
-package com.example.simplehero.models
+package com.example.simplehero.models.comic
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

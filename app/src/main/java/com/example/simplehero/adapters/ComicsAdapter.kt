@@ -5,14 +5,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.simplehero.databinding.ComicViewholderBinding
-import com.example.simplehero.models.Comic
+import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.utils.IMAGE_VARIANT_STANDARD_LARGE
 import com.example.simplehero.utils.ImageUtils
 import com.example.simplehero.utils.UtilsFun
 
 class ComicsAdapter(
-        private var comics: List<Comic>,
-        private val actionInterface: ActionInterface
+    private var comics: List<Comic>,
+    private val actionInterface: ActionInterface
     ) : RecyclerView.Adapter<ComicsAdapter.ViewHolder>() {
 
     interface ActionInterface {
@@ -32,10 +32,12 @@ class ComicsAdapter(
 
         holder.binding.title.text = comic.title
 
-        val thumbnailUrl = ImageUtils.buildImageUrl(
-            UtilsFun.httpToHttps(comic.thumbnail.path),
-            IMAGE_VARIANT_STANDARD_LARGE,
-            comic.thumbnail.extension)
+        val thumbnailUrl = comic.thumbnail?.let {
+            ImageUtils.buildImageUrl(
+                UtilsFun.httpToHttps(comic.thumbnail.path),
+                IMAGE_VARIANT_STANDARD_LARGE,
+                it.extension)
+        }
 
         Glide
             .with(holder.binding.image)

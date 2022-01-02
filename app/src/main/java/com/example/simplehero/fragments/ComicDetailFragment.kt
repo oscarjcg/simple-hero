@@ -62,10 +62,14 @@ class ComicDetailFragment : Fragment() {
             binding.title.text = comic.title
             binding.description.text = comic.description
 
-            val thumbnailUrl = ImageUtils.buildImageUrl(
-                UtilsFun.httpToHttps(comic.thumbnail.path),
-                IMAGE_VARIANT_PORTRAIT_UNCANNY,
-                comic.thumbnail.extension)
+            val thumbnailUrl = comic.thumbnail?.let {
+                    UtilsFun.httpToHttps(it.path)
+                }?.let {
+                    ImageUtils.buildImageUrl(
+                        it,
+                        IMAGE_VARIANT_PORTRAIT_UNCANNY,
+                        comic.thumbnail.extension)
+            }
             Glide
                 .with(binding.image)
                 .load(thumbnailUrl)

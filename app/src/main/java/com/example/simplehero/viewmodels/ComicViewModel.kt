@@ -1,10 +1,9 @@
 package com.example.simplehero.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.simplehero.models.Comic
+import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.repositories.CharacterRepository
 import com.example.simplehero.repositories.ComicRepository
 import com.example.simplehero.utils.COMIC_REQUEST_LIMIT
