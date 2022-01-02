@@ -4,7 +4,7 @@ import com.example.simplehero.models.comic.Comic
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class ComicDataResponse {
+class DataResponse {
     @SerializedName("offset")
     @Expose
     var offset: Int? = null

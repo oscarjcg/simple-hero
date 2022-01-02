@@ -19,7 +19,7 @@ interface ComicDao {
 
     @Transaction
     @Query("SELECT * FROM comic WHERE characterId=:characterId ORDER BY `order` LIMIT :limit OFFSET :offset")
-    suspend fun getComicWithPrices(characterId: Int, limit: Int, offset: Int): List<ComicWithPrices>
+    suspend fun getComicsWithPrices(characterId: Int, limit: Int, offset: Int): List<ComicWithPrices>
 
     @Transaction
     @Query("SELECT * FROM comic WHERE id=:comicId")

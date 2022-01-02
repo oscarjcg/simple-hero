@@ -2,32 +2,30 @@ package com.example.simplehero.repositories
 
 import com.example.simplehero.database.dao.ComicDao
 import com.example.simplehero.models.comic.Comic
-import com.example.simplehero.models.ComicResponse
-import com.example.simplehero.models.ComicWithPrices
+import com.example.simplehero.models.WrapperResponse
 import com.example.simplehero.models.comic.ComicPrice
 import com.example.simplehero.utils.*
 import com.example.simplehero.webservices.ComicWebService
 import java.lang.Exception
 import java.util.*
-import kotlin.collections.ArrayList
 
 class ComicRepository(private val comicWebService: ComicWebService,
-                      private val comicDao: ComicDao) {
+                      private val comicDao: ComicDao) : BaseRepository() {
 
     suspend fun getComic(comicId: Int): OpResult<Comic> {
         val comicCache = getCache(comicId)
         if (comicCache != null)
             return OpResult.Success(comicCache)
 
-        val comicResponse: ComicResponse
+        val wrapperResponse: WrapperResponse
         try {
             val apikeyGen = ApiKeyGenerator()
-            comicResponse = comicWebService.getComic(comicId, apikeyGen.ts, APIKEY, apikeyGen.hash)
+            wrapperResponse = comicWebService.getComic(comicId, apikeyGen.ts, APIKEY, apikeyGen.hash)
         } catch (e: Exception) {
             return OpResult.Error(e)
         }
 
-        val comic = comicResponse.data!!.results!![0]
+        val comic = wrapperResponse.data!!.results!![0]
         saveCache(comic)
 
         return OpResult.Success(comic)
@@ -58,14 +56,4 @@ class ComicRepository(private val comicWebService: ComicWebService,
         return null
     }
 
-    private fun isCacheValid(cacheTime: Long): Boolean {
-        val now = System.currentTimeMillis()
-        val cacheExpiration = cacheTime + (CACHE_INTERVAL_DAYS * DAY_MS)
-        return now < cacheExpiration
-    }
-
-    private fun buildComic(comicWithPrices: ComicWithPrices): Comic {
-        comicWithPrices.comic.prices = ArrayList(comicWithPrices.prices)
-        return comicWithPrices.comic
-    }
 }

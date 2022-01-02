@@ -19,6 +19,7 @@ import com.example.simplehero.databinding.FragmentComicDetailBinding
 import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.utils.*
 import com.example.simplehero.utils.IMAGE_VARIANT_STANDARD_LARGE
+import com.example.simplehero.viewmodels.ComicDetailViewModel
 import com.example.simplehero.viewmodels.ComicViewModel
 
 
@@ -26,7 +27,7 @@ class ComicDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentComicDetailBinding
     private val args: ComicDetailFragmentArgs by navArgs()
-    private val comicViewModel: ComicViewModel by activityViewModels()
+    private val comicDetailViewModel: ComicDetailViewModel by activityViewModels()
     private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +43,7 @@ class ComicDetailFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentComicDetailBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-        binding.viewModel = comicViewModel
+        binding.viewModel = comicDetailViewModel
         return binding.root
     }
 
@@ -54,22 +55,22 @@ class ComicDetailFragment : Fragment() {
 
         observeComic()
         observeUIEvents()
-        comicViewModel.comicSelected.value = Comic(INVALID_COMIC_ID)
+        comicDetailViewModel.comicSelected.value = Comic(INVALID_COMIC_ID)
 
-        comicViewModel.getComic(args.comicId)
+        comicDetailViewModel.getComic(args.comicId)
     }
 
     private fun observeComic() {
-        comicViewModel.comicSelected.observe(viewLifecycleOwner, { comic ->
+        comicDetailViewModel.comicSelected.observe(viewLifecycleOwner, { comic ->
             val showComicSelected = comic.id != INVALID_COMIC_ID
-            comicViewModel.setShowComicSelected(showComicSelected)
+            comicDetailViewModel.setShowComicSelected(showComicSelected)
             binding.title.text = comic.title
             binding.description.text = comic.description
 
             val thumbnailUrl = comic.thumbnail?.let {
                     UtilsFun.httpToHttps(it.path)
                 }?.let {
-                    ImageUtils.buildImageUrl(
+                    UtilsFun.buildImageUrl(
                         it,
                         IMAGE_VARIANT_PORTRAIT_UNCANNY,
                         comic.thumbnail.extension)
@@ -83,7 +84,7 @@ class ComicDetailFragment : Fragment() {
     }
 
     private fun observeUIEvents() {
-        comicViewModel.uiState.observe(viewLifecycleOwner, {
+        comicDetailViewModel.uiState.observe(viewLifecycleOwner, {
             it.getContentIfNotHandled()?.let { uiEvent ->
                 handleUIEvent(uiEvent)
             }
@@ -96,7 +97,7 @@ class ComicDetailFragment : Fragment() {
                 checkInternet()
             }
             is UIEvent.NoResults -> {
-                comicViewModel.setStateInfo(true, getText(R.string.no_results) as String)
+                comicDetailViewModel.setStateInfo(true, getText(R.string.no_results) as String)
             }
         }
     }

@@ -1,6 +1,6 @@
 package com.example.simplehero.webservices
 
-import com.example.simplehero.models.ComicResponse
+import com.example.simplehero.models.WrapperResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -11,5 +11,5 @@ interface ComicWebService {
         @Path("comicId") comicId: Int,
         @Query("ts") ts: String,
         @Query("apikey") apikey: String,
-        @Query("hash") hash: String): ComicResponse
+        @Query("hash") hash: String): WrapperResponse
 }

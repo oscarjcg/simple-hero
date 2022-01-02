@@ -14,5 +14,9 @@ class UtilsFun {
         fun httpToHttps(url: String): String {
             return url.replace("http", "https")
         }
+
+        fun buildImageUrl(path: String, variant: String, extension: String): String {
+            return "$path/$variant.$extension"
+        }
     }
 }
