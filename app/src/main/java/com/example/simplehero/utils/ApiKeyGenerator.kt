@@ -1,8 +1,12 @@
 package com.example.simplehero.utils
 
-class ApiKeyGenerator {
+class ApiKeyGenerator() {
     var ts: String = ""
     var hash: String = ""
+
+    init {
+        generate()
+    }
 
     fun generate() {
         ts = System.currentTimeMillis().toString()

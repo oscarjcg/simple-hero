@@ -6,10 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.repositories.CharacterRepository
 import com.example.simplehero.repositories.ComicRepository
-import com.example.simplehero.utils.COMIC_REQUEST_LIMIT
-import com.example.simplehero.utils.Event
-import com.example.simplehero.utils.OpResult
-import com.example.simplehero.utils.UIEvent
+import com.example.simplehero.utils.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import java.lang.Exception
@@ -23,6 +20,7 @@ class ComicViewModel
 
     val comics = MutableLiveData<List<Comic>>()
     val comicSelected = MutableLiveData<Comic>()
+    val showComicSelected = MutableLiveData(false)
     val loading = MutableLiveData(false)
     var offsetRequest = 0
     val uiState = MutableLiveData<Event<UIEvent<Nothing>>>()
@@ -94,7 +92,7 @@ class ComicViewModel
         exception.printStackTrace()
         uiState.value = Event(UIEvent.CheckInternet)
 
-        if (comicSelected.value == null) {
+        if (comicSelected.value == null || comicSelected.value!!.id == INVALID_COMIC_ID) {
             uiState.value = Event(UIEvent.NoResults)
         }
     }
@@ -106,5 +104,9 @@ class ComicViewModel
     fun setStateInfo(show: Boolean, message: String = "") {
         showStateInfo.value = show
         stateInfo.value = message
+    }
+
+    fun setShowComicSelected(show: Boolean) {
+        showComicSelected.value = show
     }
 }

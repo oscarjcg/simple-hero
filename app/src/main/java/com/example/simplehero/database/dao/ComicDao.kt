@@ -24,4 +24,10 @@ interface ComicDao {
     @Transaction
     @Query("SELECT * FROM comic WHERE id=:comicId")
     suspend fun getComicWithPrice(comicId: Int): ComicWithPrices
+
+    @Query("DELETE FROM comic")
+    suspend fun deleteAllComics()
+
+    @Query("DELETE FROM comic_prices")
+    suspend fun deleteAllComicsPrices()
 }

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.simplehero.R
 import com.example.simplehero.databinding.ComicViewholderBinding
 import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.utils.IMAGE_VARIANT_STANDARD_LARGE
@@ -42,6 +43,7 @@ class ComicsAdapter(
         Glide
             .with(holder.binding.image)
             .load(thumbnailUrl)
+            .error(R.drawable.comic_placeholder)
             .into(holder.binding.image)
 
         holder.binding.container.setOnClickListener {

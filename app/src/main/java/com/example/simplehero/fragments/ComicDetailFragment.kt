@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.bumptech.glide.Glide
 import com.example.simplehero.R
 import com.example.simplehero.databinding.FragmentComicDetailBinding
+import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.utils.*
 import com.example.simplehero.utils.IMAGE_VARIANT_STANDARD_LARGE
 import com.example.simplehero.viewmodels.ComicViewModel
@@ -53,12 +54,15 @@ class ComicDetailFragment : Fragment() {
 
         observeComic()
         observeUIEvents()
+        comicViewModel.comicSelected.value = Comic(INVALID_COMIC_ID)
 
         comicViewModel.getComic(args.comicId)
     }
 
     private fun observeComic() {
         comicViewModel.comicSelected.observe(viewLifecycleOwner, { comic ->
+            val showComicSelected = comic.id != INVALID_COMIC_ID
+            comicViewModel.setShowComicSelected(showComicSelected)
             binding.title.text = comic.title
             binding.description.text = comic.description
 
@@ -73,6 +77,7 @@ class ComicDetailFragment : Fragment() {
             Glide
                 .with(binding.image)
                 .load(thumbnailUrl)
+                .error(R.drawable.comic_placeholder)
                 .into(binding.image)
         })
     }

@@ -1,5 +1,6 @@
 package com.example.simplehero.repositories
 
+import android.util.Log
 import com.example.simplehero.database.dao.ComicDao
 import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.models.ComicResponse
@@ -23,9 +24,9 @@ class CharacterRepository(private val characterWebService: CharacterWebService,
         val comicResponse: ComicResponse
         try {
             val apikeyGen = ApiKeyGenerator()
-            apikeyGen.generate()
             comicResponse =
                 characterWebService.getComics(characterId, apikeyGen.ts, APIKEY, apikeyGen.hash, offset, limit)
+            Log.e("DEBUG", "API call")
         } catch (e: Exception) {
             return OpResult.Error(e)
         }
@@ -58,7 +59,20 @@ class CharacterRepository(private val characterWebService: CharacterWebService,
 
     private suspend fun getCache(characterId: Int, offset: Int, limit: Int): List<Comic> {
         val comicWithPrices =  comicDao.getComicWithPrices(characterId, limit, offset)
+        if (comicWithPrices.isNotEmpty()) {
+            val cacheDate = comicWithPrices[0].comic.createdAt
+            if (cacheDate != null && !isCacheValid(cacheDate.time)) {
+                deleteComics()
+                return ArrayList()
+            }
+        }
         return buildComics(comicWithPrices)
+    }
+
+    private fun isCacheValid(cacheTime: Long): Boolean {
+        val now = System.currentTimeMillis()
+        val cacheDateExpiration = cacheTime + (CACHE_INTERVAL_DAYS * DAY_MS)
+        return now < cacheDateExpiration
     }
 
     private fun buildComics(comicWithPrices: List<ComicWithPrices>): List<Comic> {
@@ -71,4 +85,8 @@ class CharacterRepository(private val characterWebService: CharacterWebService,
         return comics
     }
 
+    private suspend fun deleteComics() {
+        comicDao.deleteAllComicsPrices()
+        comicDao.deleteAllComics()
+    }
 }

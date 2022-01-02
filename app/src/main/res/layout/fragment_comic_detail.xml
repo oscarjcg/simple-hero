@@ -76,9 +76,11 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:visibility="@{viewModel.showComicSelected? View.VISIBLE : View.GONE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/description">
+                        app:layout_constraintTop_toBottomOf="@+id/description"
+                        tools:visibility="visible">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -164,22 +166,22 @@
                             android:orientation="horizontal">
 
                             <TextView
+                                style="@style/TextSecondary"
                                 android:layout_width="50dp"
                                 android:layout_height="wrap_content"
+                                android:layout_margin="4dp"
                                 android:layout_weight="1"
                                 android:gravity="end"
-                                android:layout_margin="4dp"
-                                style="@style/TextSecondary"
                                 android:text="@string/pages" />
 
                             <TextView
                                 android:id="@+id/pageCount"
+                                style="@style/TextSecondary"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_margin="4dp"
                                 android:layout_weight="1"
                                 android:gravity="start"
-                                android:layout_margin="4dp"
-                                style="@style/TextSecondary"
                                 android:text="@{String.valueOf(viewModel.comicSelected.pageCount)}" />
                         </LinearLayout>
 
@@ -191,6 +193,7 @@
                         android:layout_height="450dp"
                         android:layout_marginTop="8dp"
                         android:scaleType="fitCenter"
+                        android:visibility="@{viewModel.showComicSelected? View.VISIBLE : View.GONE}"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/info"

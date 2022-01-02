@@ -22,7 +22,6 @@ class ComicRepository(private val comicWebService: ComicWebService,
         val comicResponse: ComicResponse
         try {
             val apikeyGen = ApiKeyGenerator()
-            apikeyGen.generate()
             comicResponse = comicWebService.getComic(comicId, apikeyGen.ts, APIKEY, apikeyGen.hash)
         } catch (e: Exception) {
             return OpResult.Error(e)
@@ -36,11 +35,9 @@ class ComicRepository(private val comicWebService: ComicWebService,
 
     private suspend fun saveCache(comic: Comic) {
         comic.createdAt = Date()
-
         comic.prices?.let { prices ->
             saveComicPrices(prices, comic.id)
         }
-
         comicDao.addComic(comic)
     }
 
@@ -53,9 +50,18 @@ class ComicRepository(private val comicWebService: ComicWebService,
 
     private suspend fun getCache(comicId: Int): Comic? {
         val comicWithPrices =  comicDao.getComicWithPrice(comicId)
-        if (comicWithPrices != null)
-            return buildComic(comicWithPrices)
+        if (comicWithPrices != null) {
+            val cacheDate = comicWithPrices.comic.createdAt
+            if (cacheDate != null && isCacheValid(cacheDate.time))
+                return buildComic(comicWithPrices)
+        }
         return null
+    }
+
+    private fun isCacheValid(cacheTime: Long): Boolean {
+        val now = System.currentTimeMillis()
+        val cacheExpiration = cacheTime + (CACHE_INTERVAL_DAYS * DAY_MS)
+        return now < cacheExpiration
     }
 
     private fun buildComic(comicWithPrices: ComicWithPrices): Comic {
