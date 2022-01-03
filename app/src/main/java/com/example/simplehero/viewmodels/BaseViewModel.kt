@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModel
 import com.example.simplehero.utils.Event
 import com.example.simplehero.utils.UIEvent
 
+/**
+ * Base view model class. Contains common UI operations.
+ */
 open class BaseViewModel : ViewModel() {
     val loading = MutableLiveData(false)
     val uiState = MutableLiveData<Event<UIEvent<Nothing>>>()

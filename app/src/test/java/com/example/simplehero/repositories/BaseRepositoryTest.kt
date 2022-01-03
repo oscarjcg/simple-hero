@@ -1,18 +1,19 @@
 package com.example.simplehero.repositories
 
-import com.example.simplehero.models.ComicWithPrices
+import com.example.simplehero.models.comic.ComicWithPrices
 import com.example.simplehero.models.DataResponse
 import com.example.simplehero.models.WrapperResponse
 import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.models.comic.ComicPrice
+import com.example.simplehero.models.comiccharacter.ComicCharacter
 import com.example.simplehero.utils.OpResult
 import java.util.*
 import kotlin.collections.ArrayList
 
 open class BaseRepositoryTest {
-    fun createFakeResponseComics(n: Int, comicId: Int): WrapperResponse {
-        val response = WrapperResponse()
-        val comicDataResponse = DataResponse()
+    fun createFakeResponseComics(n: Int, comicId: Int): WrapperResponse<Comic> {
+        val response = WrapperResponse<Comic>()
+        val comicDataResponse = DataResponse<Comic>()
         comicDataResponse.results = createFakeComics(n, comicId)
         response.data = comicDataResponse
         return response
@@ -62,11 +63,26 @@ open class BaseRepositoryTest {
         return comics
     }
 
-    fun getOpResultData(opResult: OpResult<List<Comic>>): List<Comic> {
+    fun <T> getOpResultData(opResult: OpResult<T>): T {
         return (opResult as OpResult.Success).data
     }
 
-    fun getOpResultDataComic(opResult: OpResult<Comic>): Comic {
-        return (opResult as OpResult.Success).data
+    fun createFakeResponseCharacter(n: Int, characterId: Int): WrapperResponse<ComicCharacter> {
+        val response = WrapperResponse<ComicCharacter>()
+        val characterDataResponse = DataResponse<ComicCharacter>()
+        characterDataResponse.results = createFakeCharacters(n, characterId)
+        response.data = characterDataResponse
+        return response
+    }
+
+    fun createFakeCharacters(n: Int, characterId: Int): ArrayList<ComicCharacter> {
+        val characters = ArrayList<ComicCharacter>()
+        val createdAt = Date()
+        for (i in 1..n) {
+            val character = ComicCharacter(characterId)
+            character.createdAt = createdAt
+            characters.add(character)
+        }
+        return characters
     }
 }

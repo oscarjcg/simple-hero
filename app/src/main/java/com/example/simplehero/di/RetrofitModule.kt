@@ -13,6 +13,9 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
+/**
+ * Provides retrofit services.
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object RetrofitModule {

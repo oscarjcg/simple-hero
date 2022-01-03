@@ -21,13 +21,16 @@ import com.example.simplehero.viewmodels.ComicViewModel
 
 private const val GRID_WIDTH_SPAN = 2
 
+/**
+ * Shows a comic grid.
+ */
 class ComicsFragment : Fragment(), ComicsAdapter.ActionInterface {
 
     private lateinit var binding: FragmentComicsBinding
     private val comicViewModel: ComicViewModel by activityViewModels()
     private lateinit var navController: NavController
-
     private lateinit var comicsAdapter: ComicsAdapter
+    private val characterId = 1009282
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +59,7 @@ class ComicsFragment : Fragment(), ComicsAdapter.ActionInterface {
         comicsListOnEndListener()
         observeUIEvents()
 
-        requestComics()
+        initRequests()
     }
 
     private fun initComicsEmptyList() {
@@ -65,12 +68,22 @@ class ComicsFragment : Fragment(), ComicsAdapter.ActionInterface {
         binding.comics.adapter = comicsAdapter
     }
 
+    private fun initRequests() {
+        if (!comicViewModel.comicsInitialized()) {
+            requestComics()
+            comicViewModel.getCharacter(characterId)
+        }
+    }
+
     private fun observeComics() {
         comicViewModel.comics.observe(viewLifecycleOwner, { comics ->
-            comicsAdapter.setComics(comics)
+            comicsAdapter.setComics(ArrayList(comics))
         })
     }
 
+    /**
+     * Request comics if end of list.
+     */
     private fun comicsListOnEndListener() {
         binding.comics.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
@@ -86,8 +99,7 @@ class ComicsFragment : Fragment(), ComicsAdapter.ActionInterface {
     }
 
     private fun requestComics() {
-        val doctorStrangeId = 1009282
-        comicViewModel.getComics(doctorStrangeId)
+        comicViewModel.getComics(characterId)
     }
 
     private fun observeUIEvents() {
@@ -116,6 +128,14 @@ class ComicsFragment : Fragment(), ComicsAdapter.ActionInterface {
         }
     }
 
+    /**
+     * Click comic to go to its details.
+     */
+    override fun onClickComic(comic: Comic) {
+        val action = ComicsFragmentDirections.actionComicsFragmentToComicDetailFragment(comic.id)
+        navController.navigate(action)
+    }
+
     companion object {
         /**
          * Use this factory method to create a new instance of
@@ -131,8 +151,4 @@ class ComicsFragment : Fragment(), ComicsAdapter.ActionInterface {
             }
     }
 
-    override fun onClickComic(comic: Comic) {
-        val action = ComicsFragmentDirections.actionComicsFragmentToComicDetailFragment(comic.id)
-        navController.navigate(action)
-    }
 }

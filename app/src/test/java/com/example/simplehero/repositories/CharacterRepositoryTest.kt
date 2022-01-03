@@ -1,7 +1,8 @@
 package com.example.simplehero.repositories
 
+import com.example.simplehero.database.dao.ComicCharacterDao
 import com.example.simplehero.database.dao.ComicDao
-import com.example.simplehero.models.ComicWithPrices
+import com.example.simplehero.models.comic.ComicWithPrices
 import com.example.simplehero.webservices.CharacterWebService
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -13,6 +14,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
+import kotlin.collections.ArrayList
 
 @ExperimentalCoroutinesApi
 class CharacterRepositoryTest : BaseRepositoryTest() {
@@ -21,6 +23,8 @@ class CharacterRepositoryTest : BaseRepositoryTest() {
     private lateinit var characterWebService: CharacterWebService
     @Mock
     private lateinit var comicDao: ComicDao
+    @Mock
+    private lateinit var comicCharacterDao: ComicCharacterDao
     @InjectMocks
     private lateinit var characterRepository: CharacterRepository
 
@@ -69,6 +73,38 @@ class CharacterRepositoryTest : BaseRepositoryTest() {
             .getComics(eq(characterId), anyString(), anyString(), anyString(), eq(offset), eq(limit))
         assertThat(comics).isEqualTo(buildComics(cacheComics))
         assertThat(comics.size).isEqualTo(cacheComics.size)
+    }
+
+    @Test
+    fun requestCharacter_withoutCache_getCharacterFromWebService() = runBlockingTest {
+        val response = createFakeResponseCharacter(1, webServiceId)
+        val cacheComicCharacter = null
+
+        `when`(comicCharacterDao.getCharacter(characterId)).thenReturn(cacheComicCharacter)
+        `when`(characterWebService
+            .getCharacter(eq(characterId), anyString(), anyString(), anyString()))
+            .thenReturn(response)
+        val character = getOpResultData(characterRepository.getCharacter(characterId))
+
+        verify(characterWebService)
+            .getCharacter(eq(characterId), anyString(), anyString(), anyString())
+        assertThat(character).isEqualTo(response.data!!.results!![0])
+    }
+
+    @Test
+    fun requestCharacter_withCache_getCharacterFromCache() = runBlockingTest {
+        val response = createFakeResponseCharacter(1, webServiceId)
+        val cacheComicCharacter = createFakeCharacters(1, cacheId)
+
+        `when`(comicCharacterDao.getCharacter(characterId)).thenReturn(cacheComicCharacter[0])
+        `when`(characterWebService
+            .getCharacter(eq(characterId), anyString(), anyString(), anyString()))
+            .thenReturn(response)
+        val character = getOpResultData(characterRepository.getCharacter(characterId))
+
+        verify(characterWebService, never())
+            .getCharacter(eq(characterId), anyString(), anyString(), anyString())
+        assertThat(character).isEqualTo(cacheComicCharacter[0])
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.simplehero.di
 import android.content.Context
 import androidx.room.Room
 import com.example.simplehero.database.AppDatabase
+import com.example.simplehero.database.dao.ComicCharacterDao
 import com.example.simplehero.database.dao.ComicDao
 import dagger.Module
 import dagger.Provides
@@ -11,6 +12,9 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/**
+ * Provides database services.
+ */
 @InstallIn(SingletonComponent::class)
 @Module
 object RoomModule {
@@ -29,5 +33,11 @@ object RoomModule {
     @Provides
     fun provideComicDao(database: AppDatabase): ComicDao {
         return database.comicDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideComicCharacterDao(database: AppDatabase): ComicCharacterDao {
+        return database.comicCharacterDao()
     }
 }

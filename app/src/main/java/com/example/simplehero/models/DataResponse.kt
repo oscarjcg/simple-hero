@@ -4,7 +4,7 @@ import com.example.simplehero.models.comic.Comic
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class DataResponse {
+class DataResponse<T> {
     @SerializedName("offset")
     @Expose
     var offset: Int? = null
@@ -23,5 +23,5 @@ class DataResponse {
 
     @SerializedName("results")
     @Expose
-    var results: ArrayList<Comic>? = null
+    var results: ArrayList<T>? = null
 }

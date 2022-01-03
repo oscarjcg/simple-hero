@@ -1,7 +1,7 @@
 package com.example.simplehero.database.dao
 
 import androidx.room.*
-import com.example.simplehero.models.ComicWithPrices
+import com.example.simplehero.models.comic.ComicWithPrices
 import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.models.comic.ComicPrice
 

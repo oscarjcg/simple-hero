@@ -3,7 +3,7 @@ package com.example.simplehero.models
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-class WrapperResponse {
+class WrapperResponse<T> {
     @SerializedName("code")
     @Expose
     var code: Int? = null
@@ -14,5 +14,5 @@ class WrapperResponse {
 
     @SerializedName("data")
     @Expose
-    var data: DataResponse? = null
+    var data: DataResponse<T>? = null
 }

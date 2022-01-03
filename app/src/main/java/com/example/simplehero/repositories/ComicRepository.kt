@@ -13,11 +13,13 @@ class ComicRepository(private val comicWebService: ComicWebService,
                       private val comicDao: ComicDao) : BaseRepository() {
 
     suspend fun getComic(comicId: Int): OpResult<Comic> {
+        // Check cache
         val comicCache = getCache(comicId)
         if (comicCache != null)
             return OpResult.Success(comicCache)
 
-        val wrapperResponse: WrapperResponse
+        // Request webservice
+        val wrapperResponse: WrapperResponse<Comic>
         try {
             val apikeyGen = ApiKeyGenerator()
             wrapperResponse = comicWebService.getComic(comicId, apikeyGen.ts, APIKEY, apikeyGen.hash)
@@ -46,6 +48,9 @@ class ComicRepository(private val comicWebService: ComicWebService,
         comicDao.addAllComicPrices(prices.toList())
     }
 
+    /**
+     * Get comic from cache checking if it is expired. Delete all if expired.
+     */
     private suspend fun getCache(comicId: Int): Comic? {
         val comicWithPrices =  comicDao.getComicWithPrice(comicId)
         if (comicWithPrices != null) {

@@ -39,7 +39,7 @@ class ComicRepositoryTest : BaseRepositoryTest() {
         `when`(comicWebService
             .getComic(eq(comicId), anyString(), anyString(), anyString()))
             .thenReturn(response)
-        val comic = getOpResultDataComic(comicRepository.getComic(comicId))
+        val comic = getOpResultData(comicRepository.getComic(comicId))
 
         verify(comicWebService)
             .getComic(eq(comicId), anyString(), anyString(), anyString())
@@ -56,7 +56,7 @@ class ComicRepositoryTest : BaseRepositoryTest() {
         `when`(comicWebService
             .getComic(eq(comicId), anyString(), anyString(), anyString()))
             .thenReturn(response)
-        val comic = getOpResultDataComic(comicRepository.getComic(comicId))
+        val comic = getOpResultData(comicRepository.getComic(comicId))
 
         verify(comicWebService, never())
             .getComic(eq(comicId), anyString(), anyString(), anyString())

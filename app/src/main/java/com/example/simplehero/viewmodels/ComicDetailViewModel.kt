@@ -46,6 +46,9 @@ class ComicDetailViewModel
         comicSelected.value = data
     }
 
+    /**
+     * Check errors and communicate them to UI.
+     */
     private fun handleError(exception: Exception) {
         exception.printStackTrace()
         uiState.value = Event(UIEvent.CheckInternet)

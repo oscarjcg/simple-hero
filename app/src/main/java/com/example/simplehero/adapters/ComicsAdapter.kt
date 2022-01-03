@@ -10,8 +10,11 @@ import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.utils.IMAGE_VARIANT_STANDARD_LARGE
 import com.example.simplehero.utils.UtilsFun
 
+/**
+ * Adapter for a comics list. A comic can be selected.
+ */
 class ComicsAdapter(
-    private var comics: List<Comic>,
+    private var comics: ArrayList<Comic>,
     private val actionInterface: ActionInterface
     ) : RecyclerView.Adapter<ComicsAdapter.ViewHolder>() {
 
@@ -32,6 +35,7 @@ class ComicsAdapter(
 
         holder.binding.title.text = comic.title
 
+        // Image url
         val thumbnailUrl = comic.thumbnail?.let {
             UtilsFun.buildImageUrl(
                 UtilsFun.httpToHttps(comic.thumbnail.path),
@@ -39,6 +43,7 @@ class ComicsAdapter(
                 it.extension)
         }
 
+        // Image
         Glide
             .with(holder.binding.image)
             .load(thumbnailUrl)
@@ -54,8 +59,11 @@ class ComicsAdapter(
         return comics.size
     }
 
-    fun setComics(comics: List<Comic>) {
+    fun setComics(comics: ArrayList<Comic>) {
+        val startPos = this.comics.size
+        val newCount = comics.size - this.comics.size
         this.comics = comics
-        notifyDataSetChanged()
+
+        notifyItemRangeInserted(startPos, newCount)
     }
 }

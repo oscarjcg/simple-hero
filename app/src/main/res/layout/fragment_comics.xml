@@ -21,7 +21,7 @@
             style="@style/TextPrimary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Doctor Strange"
+            android:text="@{viewModel.character.name}"
             android:gravity="center_horizontal"
             android:textSize="30sp"
             app:layout_constraintEnd_toEndOf="parent"

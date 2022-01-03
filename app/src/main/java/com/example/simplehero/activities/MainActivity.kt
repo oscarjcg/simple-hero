@@ -6,6 +6,9 @@ import androidx.navigation.findNavController
 import com.example.simplehero.R
 import dagger.hilt.android.AndroidEntryPoint
 
+/**
+ * Main activity. Contains entire app changing fragments.
+ */
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -6,6 +6,9 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
+const val PRICE_TYPE_PRINT = "printPrice"
+const val PRICE_TYPE_PURCHASE_DIGITAL = "digitalPurchasePrice"
+
 @Entity(tableName = "comic_prices", indices = [Index(value = ["id"], unique = true)])
 data class ComicPrice(
     @PrimaryKey(autoGenerate = true)

@@ -1,4 +1,4 @@
-package com.example.simplehero.models
+package com.example.simplehero.models.comic
 
 import androidx.room.Embedded
 import androidx.room.Relation

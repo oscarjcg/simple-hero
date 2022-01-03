@@ -1,10 +1,13 @@
 package com.example.simplehero.repositories
 
-import com.example.simplehero.models.ComicWithPrices
+import com.example.simplehero.models.comic.ComicWithPrices
 import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.utils.CACHE_INTERVAL_DAYS
 import com.example.simplehero.utils.DAY_MS
 
+/**
+ * Base class for repositories.
+ */
 open class BaseRepository {
     fun isCacheValid(cacheTime: Long): Boolean {
         val now = System.currentTimeMillis()

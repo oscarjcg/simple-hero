@@ -1,5 +1,8 @@
 package com.example.simplehero.utils
 
+/**
+ * Generates api values for webservice.
+ */
 class ApiKeyGenerator() {
     var ts: String = ""
     var hash: String = ""

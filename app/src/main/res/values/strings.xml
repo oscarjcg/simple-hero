@@ -8,4 +8,6 @@
     <string name="pages">Pages:</string>
     <string name="price">Price:</string>
     <string name="format">Format:</string>
+    <string name="price_printed">Digital price:</string>
+    <string name="price_digital">Printed price:</string>
 </resources>
