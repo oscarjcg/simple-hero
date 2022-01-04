@@ -67,7 +67,7 @@ class ComicDetailFragment : Fragment() {
 
     private fun initialize() {
         // Invalid comic
-        comicDetailViewModel.comicSelected.value = Comic(INVALID_COMIC_ID)
+        comicDetailViewModel.setComic(Comic(INVALID_COMIC_ID))
 
         // Start comic request
         comicDetailViewModel.getComic(args.comicId)
@@ -75,9 +75,6 @@ class ComicDetailFragment : Fragment() {
 
     private fun observeComic() {
         comicDetailViewModel.comicSelected.observe(viewLifecycleOwner, { comic ->
-            // Don't show invalid comic
-            val showComicSelected = (comic.id != INVALID_COMIC_ID)
-            comicDetailViewModel.setShowComicSelected(showComicSelected)
 
             binding.title.text = comic.title
             binding.description.text = comic.description

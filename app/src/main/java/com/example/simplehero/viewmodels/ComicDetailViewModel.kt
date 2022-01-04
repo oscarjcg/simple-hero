@@ -1,7 +1,6 @@
 package com.example.simplehero.viewmodels
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.simplehero.models.comic.Comic
 import com.example.simplehero.repositories.ComicRepository
@@ -21,6 +20,14 @@ class ComicDetailViewModel
 
     val comicSelected = MutableLiveData<Comic>()
     val showComicSelected = MutableLiveData(false)
+
+    fun setComic(comic: Comic) {
+        comicSelected.value = comic
+
+        // Don't show invalid comic
+        val showComicSelected = (comic.id != INVALID_COMIC_ID)
+        setShowComicSelected(showComicSelected)
+    }
 
     fun getComic(comicId: Int) {
         setLoading(true)
@@ -43,7 +50,7 @@ class ComicDetailViewModel
     }
 
     private fun handleSuccess(data: Comic) {
-        comicSelected.value = data
+        setComic(data)
     }
 
     /**
